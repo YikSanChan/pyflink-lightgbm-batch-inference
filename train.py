@@ -52,15 +52,16 @@ def train_model():
     # save model to file
     gbm.save_model('model.txt')
 
-model_file = Path.cwd() / "model.txt"
-if not model_file.is_file():
-    train_model()
-gbm = lgb.Booster(model_file="model.txt")
+if __name__ == "__main__":
+    model_file = Path.cwd() / "model.txt"
+    if not model_file.is_file():
+        train_model()
+    gbm = lgb.Booster(model_file="model.txt")
 
-print('Starting predicting...')
-_, (X_test, y_test) = load_data()
-# predict
-y_pred = gbm.predict(X_test, num_iteration=gbm.best_iteration)
-# eval
-rmse_test = mean_squared_error(y_test, y_pred) ** 0.5
-print(f'The RMSE of prediction is: {rmse_test}')
+    print('Starting predicting...')
+    _, (X_test, y_test) = load_data()
+    # predict
+    y_pred = gbm.predict(X_test, num_iteration=gbm.best_iteration)
+    # eval
+    rmse_test = mean_squared_error(y_test, y_pred) ** 0.5
+    print(f'The RMSE of prediction is: {rmse_test}')
