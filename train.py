@@ -1,4 +1,4 @@
-# coding: utf-8
+# Adopt https://github.com/microsoft/LightGBM/blob/bc9d34e4e651b5744b29a556a2e9d2301707e35b/examples/python-guide/simple_example.py
 from pathlib import Path
 
 import pandas as pd
