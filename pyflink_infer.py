@@ -26,7 +26,7 @@ predict = udf(Predict(), result_type=DataTypes.DOUBLE(), func_type="pandas")
 
 t_env.create_temporary_function("predict", predict)
 
-SOURCE_DDL = """
+SOURCE = """
 CREATE TABLE source (
     label INT,
     f1 DOUBLE,
@@ -65,7 +65,7 @@ CREATE TABLE source (
 )
 """
 
-SINK_DDL = """
+SINK = """
 CREATE TABLE sink (
     prediction DOUBLE
 ) WITH (
@@ -73,13 +73,13 @@ CREATE TABLE sink (
 )
 """
 
-TRANSFORM_DML = """
+TRANSFORM = """
 INSERT INTO sink
 SELECT PREDICT(
     f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, f25, f26, f27, f28
 ) FROM source
 """
 
-t_env.execute_sql(SOURCE_DDL)
-t_env.execute_sql(SINK_DDL)
-t_env.execute_sql(TRANSFORM_DML).wait()
+t_env.execute_sql(SOURCE)
+t_env.execute_sql(SINK)
+t_env.execute_sql(TRANSFORM).wait()
