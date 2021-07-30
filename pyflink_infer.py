@@ -8,7 +8,7 @@ class Predict(ScalarFunction):
         import lightgbm as lgb
 
         logging.info("Loading model...")
-        self.model = lgb.Booster(model_file="model.txt")
+        self.model = lgb.Booster(model_file="archive.zip/model.txt")
 
     def eval(self, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, f25, f26, f27, f28):
         import pandas as pd
@@ -82,4 +82,4 @@ SELECT PREDICT(
 
 t_env.execute_sql(SOURCE)
 t_env.execute_sql(SINK)
-t_env.execute_sql(TRANSFORM).wait()
+t_env.execute_sql(TRANSFORM)
