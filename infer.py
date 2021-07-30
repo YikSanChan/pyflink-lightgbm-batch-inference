@@ -1,14 +1,30 @@
+import logging
 from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.table import *
-
-# from udf_def import predict
-
+from pyflink.table.udf import ScalarFunction, udf
+from pyflink.table import DataTypes, EnvironmentSettings, StreamTableEnvironment
 
 settings = EnvironmentSettings.new_instance().use_blink_planner().build()
 exec_env = StreamExecutionEnvironment.get_execution_environment()
 t_env = StreamTableEnvironment.create(exec_env, environment_settings=settings)
 
-# t_env.create_temporary_function("predict", predict)
+
+class Predict(ScalarFunction):
+    def open(self, function_context):
+        import lightgbm as lgb
+
+        logging.info("Loading model...")
+        self.model = lgb.Booster(model_file="model.txt")
+
+    def eval(self, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, f25, f26, f27, f28):
+        import pandas as pd
+
+        logging.info("Predicting, batch size=%d...", len(f1))
+        df = pd.concat([f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, f25, f26, f27, f28], axis=1)
+        return pd.Series(self.model.predict(df))
+
+predict = udf(Predict(), result_type=DataTypes.DOUBLE(), func_type="pandas")
+
+t_env.create_temporary_function("predict", predict)
 
 SOURCE_DDL = """
 CREATE TABLE source (
@@ -51,7 +67,7 @@ CREATE TABLE source (
 
 SINK_DDL = """
 CREATE TABLE sink (
-    label INT
+    prediction DOUBLE
 ) WITH (
     'connector' = 'print'
 )
@@ -59,7 +75,9 @@ CREATE TABLE sink (
 
 TRANSFORM_DML = """
 INSERT INTO sink
-SELECT label FROM source
+SELECT PREDICT(
+    f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, f21, f22, f23, f24, f25, f26, f27, f28
+) FROM source
 """
 
 t_env.execute_sql(SOURCE_DDL)
