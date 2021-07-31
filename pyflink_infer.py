@@ -1,7 +1,6 @@
 import logging
-from pyflink.datastream import StreamExecutionEnvironment
 from pyflink.table.udf import ScalarFunction, udf
-from pyflink.table import DataTypes, EnvironmentSettings, StreamTableEnvironment
+from pyflink.table import DataTypes, EnvironmentSettings, TableEnvironment
 
 class Predict(ScalarFunction):
     def open(self, function_context):
@@ -18,9 +17,8 @@ class Predict(ScalarFunction):
         return pd.Series(self.model.predict(df))
 
 
-settings = EnvironmentSettings.new_instance().use_blink_planner().build()
-exec_env = StreamExecutionEnvironment.get_execution_environment()
-t_env = StreamTableEnvironment.create(exec_env, environment_settings=settings)
+env_settings = EnvironmentSettings.new_instance().in_streaming_mode().use_blink_planner().build()
+t_env = TableEnvironment.create(env_settings)
 
 predict = udf(Predict(), result_type=DataTypes.DOUBLE(), func_type="pandas")
 
