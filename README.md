@@ -29,8 +29,8 @@ Infer with PyFlink.
 $ # Spin up Flink locally
 $ ~/softwares/flink-1.13.0/bin/start-cluster.sh
 $ # Prepare resources needed for a PyFlink run
-$ (cd /usr/local/anaconda3/envs/pyflink-lightgbm && zip -r - .) > conda-env.zip
+$ (cd /usr/local/anaconda3/envs/pyflink-lightgbm && zip -r - .) > pyenv.zip
 $ zip archive.zip model.txt
 $ # Submit to Flink cluster. Open http://localhost:8081/ to check
-$ ~/softwares/flink-1.13.0/bin/flink run -d -pyexec pyflink-lightgbm/bin/python -pyarch archive.zip,conda-env.zip#pyflink-lightgbm -py pyflink_infer.py
+$ ~/softwares/flink-1.13.0/bin/flink run -d -pyexec pyflink-lightgbm/bin/python -pyarch archive.zip,pyenv.zip#pyflink-lightgbm -py pyflink_infer.py
 ```
