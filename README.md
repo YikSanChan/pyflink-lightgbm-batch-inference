@@ -5,7 +5,6 @@ Setup.
 ```sh
 $ conda env create -f environment.yaml
 $ conda activate pyflink-lightgbm
-$ brew install lightgbm
 ```
 
 Reference https://github.com/microsoft/LightGBM/blob/bc9d34e4e651b5744b29a556a2e9d2301707e35b/examples/python-guide/simple_example.py
